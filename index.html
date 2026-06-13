@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="U<scTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SMK NURUL FALAH - THE GLIMPSE OF FUTURE</title>
 <meta name="google-site-verification" content="bcu4uRS7dTLeJExZS1IX56ZkOeI4F5Wu1O48GXmes8Y" />
@@ -223,8 +223,6 @@
         }
         .author-link:hover { background: var(--neon); color: black; box-shadow: 0 0 15px var(--neon); transform: translateY(-3px); }
         
-        #system-log { color: var(--neon) !important; opacity: 0.7; }
-
         .control-btn {
             position: fixed; bottom: 20px; width: 45px; height: 45px;
             border: 1px solid var(--neon); background: rgba(0, 0, 0, 0.8); color: var(--neon);
@@ -272,7 +270,7 @@
             <div class="glitch-wrapper">
                 <h1 class="glitch" data-text="SMK NURUL FALAH">SMK NURUL FALAH</h1>
             </div>
-            <div id="subtitle-text" class="subtitle"></div>
+            <span id="subtitle-text" class="subtitle" style="cursor: pointer; user-select: none;">(BDP) PEMASARAN</span>
         </header>
 
         <nav>
@@ -319,8 +317,18 @@
     </a>
 
     <a id="btn-pembuat" href="https://wa.me/6283199753711" target="_blank" class="author-link" onclick="AudioFX.click()"
-       style="border-color: #25D366 !important; color: #25D366 !important; box-shadow: 0 0 10px rgba(37, 211, 102, 0.3);">
+       style="border-color: #25D366 !important; color: #25D366 !important; box-shadow: 0 0 10px rgba(37, 211, 102, 0.3); position: relative;">
         <i class="fa-brands fa-whatsapp"></i> PEMBUAT
+        <span id="hold-hint" style="
+            display: block;
+            font-size: 0.55rem;
+            letter-spacing: 2px;
+            color: rgba(37, 211, 102, 0.6);
+            margin-top: 3px;
+            text-align: center;
+            font-family: var(--font-main);
+            animation: hint-blink 2s step-end infinite;
+        ">[ HOLD FOR SECRET ]</span>
     </a>
 
     <a href="https://www.instagram.com/smknurulfalahmargatiga?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="author-link" onclick="AudioFX.click()"
@@ -367,7 +375,7 @@
                 <h2>PROFIL SEKOLAH</h2>
                 <p>Selamat datang di Sistem Informasi Digital <strong> Bisnis Daring dan Pemasaran (BDP)</strong>. Website ini didedikasikan sebagai media dokumentasi, informasi, dan portofolio digital siswa-siswi <strong>SMK Nurul Falah</strong>.</p>
                 <br>
-                <p>SMK Nurul Falah berlokasi di <strong>Desand Gedung Wani Timur, Kecamatan Margatiga, Kabupaten Lampung Timur</strong>. Di bawah naungan Yayasan Pendidikan Islam Nurul Falah, berkomitmen mencetak generasi muda yang kompeten,terampil dan bertanggung jawab serta memiliki akhlak mulia sesuai nilai pancasila.</p>
+                <p>SMK Nurul Falah berlokasi di <strong>Desa Gedung Wani Timur, Kecamatan Margatiga, Kabupaten Lampung Timur</strong>. Di bawah naungan Yayasan Pendidikan Islam Nurul Falah, berkomitmen mencetak generasi muda yang kompeten,terampil dan bertanggung jawab serta memiliki akhlak mulia sesuai nilai pancasila.</p>
                 <div class="marquee-container">
                     <div class="marquee-content">SMK NUFA JAYA &nbsp;///&nbsp; BISA - HEBAT - DISIPLIN - KOMPETEN - SIAP KERJA &nbsp;///&nbsp; SYSTEM ONLINE &nbsp;///&nbsp; SMK NUFA JAYA</div>
                 </div>
@@ -662,11 +670,11 @@
                 Scrambler.write(document.getElementById('home-content'), DATABASE_CONTENT.home);
 
                 document.getElementById('overlay').style.opacity = '0';
-                setTimeout(() => { 
-                    document.getElementById('overlay').style.display = 'none'; 
-                    document.getElementById('main-content').style.display = 'block'; 
-                    this.typeWriter('subtitle-text', '(BDP) PEMASARAN', 80);
+                setTimeout(() => {
+                    document.getElementById('overlay').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
                 }, 500);
+                
             },
 
             toggleColor: function() {
@@ -681,7 +689,7 @@
                 container.innerHTML = DATABASE_FOTO.map(item => `
                     <div class="gallery-item" onclick="AudioFX.click()">
                         <img src="${item.file}" alt="${item.caption}" loading="lazy" 
-                             onerror="this.src='https://via.placeholder.com/300x200/000000/00ff00?text=FILE+TIDAK+ADA'">
+                             onerror="this.src='https://placehold.co/300x200/000000/00ff00?text=FILE+TIDAK+ADA'">
                         <div class="caption">${item.caption}</div>
                     </div>
                 `).join('');
@@ -768,9 +776,21 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             startChaosMode();
-        });
 
-        document.addEventListener("DOMContentLoaded", () => {
+            // --- INJEKSI ANIMATION KEYFRAME UNTUK SKEW INFINITE ---
+            const styleInterlinked = document.createElement('style');
+            styleInterlinked.innerHTML = `
+                @keyframes skew-glitch {
+                    0%, 100% { transform: skew(0deg); filter: hue-rotate(0deg); }
+                    20% { transform: skew(-6deg) scaleY(1.02); filter: hue-rotate(45deg); }
+                    40% { transform: skew(7deg); }
+                    60% { transform: skew(-4deg) scaleY(0.98); filter: hue-rotate(180deg); }
+                    80% { transform: skew(5deg); }
+                }
+            `;
+            document.head.appendChild(styleInterlinked);
+
+            // --- BTN PEMBUAT HOLD LOGIC ---
             const btnPembuat = document.getElementById("btn-pembuat");
             if (!btnPembuat) return;
 
@@ -801,6 +821,19 @@
                     box-shadow: 0 0 35px var(--neon) !important;
                 }
                 .system-panic #matrix-bg { opacity: 0.25 !important; }
+                @keyframes hint-blink {
+                    0%, 100% { opacity: 0.6; }
+                    50% { opacity: 0.1; }
+                }
+                @keyframes btn-press-pulse {
+                    0%   { box-shadow: 0 0 10px rgba(37,211,102,0.3), 0 0 0px #25D366; }
+                    50%  { box-shadow: 0 0 25px rgba(37,211,102,0.9), 0 0 40px #25D366; }
+                    100% { box-shadow: 0 0 10px rgba(37,211,102,0.3), 0 0 0px #25D366; }
+                }
+                .btn-press-active {
+                    animation: btn-press-pulse 0.35s ease-in-out infinite !important;
+                    border-color: #25D366 !important;
+                }
             `;
             document.head.appendChild(style);
 
@@ -869,8 +902,12 @@
                 isHolding = false;
                 clearAllTimers();
 
+                // Pulse langsung menyala saat tombol ditekan
+                btnPembuat.classList.add('btn-press-active');
+
                 holdTimer = setTimeout(() => {
-                    isHolding = true; 
+                    isHolding = true;
+                    btnPembuat.classList.remove('btn-press-active');
                     startCountdownUI();
                 }, 700);
             }
@@ -921,6 +958,7 @@
             function releasePress(e) {
                 if (e && e.cancelable) e.preventDefault();
                 clearAllTimers();
+                btnPembuat.classList.remove('btn-press-active');
 
                 if (!isHolding) {
                     if(typeof AudioFX !== 'undefined') AudioFX.click();
@@ -932,12 +970,14 @@
 
             function abortPress() {
                 clearAllTimers();
+                btnPembuat.classList.remove('btn-press-active');
                 if (isHolding) resetButtonUI();
             }
 
             function resetButtonUI() {
                 document.body.classList.remove('system-panic');
                 btnPembuat.classList.remove('override-chaos');
+                btnPembuat.classList.remove('btn-press-active');
                 btnPembuat.setAttribute("style", originalStyle);
                 btnPembuat.innerHTML = originalContent;
                 isHolding = false;
@@ -953,8 +993,87 @@
 
             btnPembuat.addEventListener("touchstart", startPress, { passive: false });
             btnPembuat.addEventListener("touchend", releasePress, { passive: false });
-            btnPembuat.addEventListener("touchcancel", abortPress); 
-        });
+            btnPembuat.addEventListener("touchcancel", abortPress);
+
+            // --- SNEAK PEEK SUBTITLE: TRIPLE CLICK TO INTERLINKED ---
+            const subtitle = document.getElementById("subtitle-text");
+    // PERBAIKAN: Mengincar langsung class .glitch tempat teks SMK NURUL FALAH berada
+    const mainTitle = document.querySelector(".glitch"); 
+    const bgmAudio = document.getElementById("bgm"); 
+    
+    if (!subtitle) return;
+
+    let clickCount = 0;
+    let clickTimeout;
+    let isInterlinkedMode = false;
+
+    const originalBgmUrl = "bgm.mp3"; 
+    const interlinkedBgmUrl = "interlinked.mp3"; 
+
+    subtitle.addEventListener("click", () => {
+        clickCount++;
+        
+        // Reset hitungan jika jeda antar ketukan terlalu lama (2 detik aman untuk triple click)
+        clearTimeout(clickTimeout);
+        clickTimeout = setTimeout(() => {
+            clickCount = 0;
+        }, 2000); 
+
+        if (clickCount === 3) {
+            clickCount = 0; // Reset counter setelah berhasil dipicu
+            toggleInterlinkedMode();
+        }
+    });
+
+    function toggleInterlinkedMode() {
+        if (!isInterlinkedMode) {
+            // === 1. MASUK KE MODE INTERLINKED ===
+            isInterlinkedMode = true;
+
+            subtitle.textContent = "INTERLINKED";
+            subtitle.style.color = "#ff003c";
+            subtitle.style.textShadow = "0 0 15px #ff003c, 0 0 30px #ff003c";
+
+            // Efek kemiringan tak terbatas langsung menyala di judul utama
+            if (mainTitle) {
+                mainTitle.style.animation = "skew-glitch 1s infinite linear";
+                mainTitle.style.textShadow = "3px 0 0 #ff003c, -3px 0 0 #00f0ff";
+            }
+
+            // Ganti lagu utama ke file interlinked.mp3
+            if (bgmAudio) {
+                bgmAudio.src = interlinkedBgmUrl;
+                bgmAudio.load();
+                bgmAudio.play().catch(e => console.log("Audio play diblokir:", e));
+            }
+
+            if (typeof AudioFX !== 'undefined') AudioFX.click();
+
+        } else {
+            // === 2. KEMBALI KE MODE DEFAULT ===
+            isInterlinkedMode = false;
+
+            subtitle.textContent = "(BDP) PEMASARAN";
+            subtitle.style.color = ""; 
+            subtitle.style.textShadow = "";
+
+            // Matikan animasi miring dan kembalikan ke glitch bawaan
+            if (mainTitle) {
+                mainTitle.style.animation = "";
+                mainTitle.style.textShadow = "";
+            }
+
+            // Kembalikan lagu utama ke bgm.mp3
+            if (bgmAudio) {
+                bgmAudio.src = originalBgmUrl;
+                bgmAudio.load();
+                bgmAudio.play().catch(e => console.log("Audio play diblokir:", e));
+            }
+
+            if (typeof AudioFX !== 'undefined') AudioFX.click();
+        }
+    }
+        }); // akhir DOMContentLoaded utama
     </script>
 </body>
 </html>
