@@ -294,6 +294,200 @@
     font-family: var(--font-main);
 }
 
+/* ══════════════════════════════════════════════════════════
+   HOLOGRAM UPLOAD FLOATER — Tombol Upload di Tab Galeri
+   ══════════════════════════════════════════════════════════ */
+.gallery-toolbar {
+    display: flex; justify-content: flex-end; align-items: center;
+    margin: -10px 0 15px 0;
+}
+
+#hologram-upload-btn {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 22px;
+    background: rgba(0, 10, 5, 0.55);
+    border: 1px solid var(--neon);
+    color: var(--neon);
+    font-family: var(--font-main);
+    font-weight: bold; font-size: 0.85rem;
+    letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; overflow: hidden;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+    transition: 0.3s;
+    animation: holo-rainbow-pulse 4s linear infinite, holo-float 3s ease-in-out infinite;
+}
+#hologram-upload-btn i { animation: holo-icon-spin 6s linear infinite; }
+#hologram-upload-btn:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 0 25px var(--neon), 0 0 50px rgba(0,255,65,0.3);
+}
+
+/* Lapisan kaca/scanline hologram di atas tombol */
+#hologram-upload-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
+    background-size: 100% 6px;
+    animation: holo-scan 1.8s linear infinite;
+    pointer-events: none;
+}
+/* Sapuan cahaya warna-warni yang lewat */
+#hologram-upload-btn::after {
+    content: '';
+    position: absolute; top: -50%; left: -60%;
+    width: 40%; height: 200%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: rotate(20deg);
+    animation: holo-sweep 3.2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes holo-scan {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 60px; }
+}
+@keyframes holo-sweep {
+    0%   { left: -60%; }
+    50%  { left: 130%; }
+    100% { left: 130%; }
+}
+@keyframes holo-float {
+    0%, 100% { transform: translateY(0px); }
+    50%      { transform: translateY(-4px); }
+}
+@keyframes holo-icon-spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/* Border + glow warna-warni berputar mengikuti tema cyberpunk */
+@keyframes holo-rainbow-pulse {
+    0%   { border-color: var(--neon);     box-shadow: 0 0 10px var(--neon), inset 0 0 10px rgba(0,255,65,0.08); }
+    25%  { border-color: var(--glitch-blue); box-shadow: 0 0 14px var(--glitch-blue), inset 0 0 10px rgba(0,240,255,0.08); }
+    50%  { border-color: var(--glitch-red); box-shadow: 0 0 14px var(--glitch-red), inset 0 0 10px rgba(255,0,60,0.08); }
+    75%  { border-color: #bf00ff;          box-shadow: 0 0 14px #bf00ff, inset 0 0 10px rgba(191,0,255,0.08); }
+    100% { border-color: var(--neon);      box-shadow: 0 0 10px var(--neon), inset 0 0 10px rgba(0,255,65,0.08); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   MODAL UPLOAD — Holographic Panel
+   ══════════════════════════════════════════════════════════ */
+#upload-modal {
+    display: none;
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.85);
+    justify-content: center; align-items: center;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.25s ease;
+    padding: 16px;
+}
+#upload-modal.open { display: flex; }
+
+.upload-panel {
+    position: relative;
+    width: 100%; max-width: 420px;
+    background: rgba(0, 12, 6, 0.7);
+    border: 1px solid var(--neon);
+    border-radius: 6px;
+    padding: 28px 24px;
+    box-shadow: 0 0 40px rgba(0,255,65,0.25), inset 0 0 30px rgba(0,255,65,0.04);
+    animation: holo-rainbow-pulse 4s linear infinite, slideUp 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+}
+/* Scanline overlay di dalam panel */
+.upload-panel::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+    background-size: 100% 8px;
+    animation: holo-scan 2.2s linear infinite;
+    pointer-events: none;
+}
+
+.upload-panel h3 {
+    margin: 0 0 6px 0; font-size: 1.1rem; letter-spacing: 3px; color: #fff;
+    text-shadow: 0 0 10px var(--neon);
+    display: flex; align-items: center; gap: 10px;
+}
+.upload-panel .upload-sub {
+    font-size: 0.7rem; opacity: 0.65; letter-spacing: 1px; margin-bottom: 18px; display: block;
+}
+
+#upload-close {
+    position: absolute; top: 14px; right: 16px;
+    background: none; border: none; color: var(--neon);
+    font-size: 1.4rem; cursor: pointer; font-family: var(--font-main);
+    transition: 0.2s; line-height: 1; z-index: 2;
+}
+#upload-close:hover { color: var(--glitch-red); text-shadow: 0 0 10px var(--glitch-red); }
+
+.upload-field { margin-bottom: 16px; position: relative; z-index: 1; }
+.upload-field label {
+    display: block; font-size: 0.7rem; letter-spacing: 2px; margin-bottom: 6px;
+    color: var(--neon); opacity: 0.85; text-transform: uppercase;
+}
+.upload-field input[type="password"],
+.upload-field input[type="text"] {
+    width: 100%; padding: 10px 12px;
+    background: rgba(0,0,0,0.6); border: 1px solid var(--neon-dim);
+    color: var(--neon); font-family: var(--font-main); font-size: 0.9rem;
+    letter-spacing: 2px; border-radius: 3px; outline: none;
+    transition: 0.2s;
+}
+.upload-field input:focus { border-color: var(--neon); box-shadow: 0 0 12px rgba(0,255,65,0.3); }
+
+/* Dropzone */
+.upload-dropzone {
+    border: 1.5px dashed var(--neon-dim); border-radius: 4px;
+    padding: 22px 10px; text-align: center; cursor: pointer;
+    background: rgba(0,0,0,0.3); transition: 0.2s; position: relative; z-index: 1;
+}
+.upload-dropzone:hover, .upload-dropzone.dragover {
+    border-color: var(--neon); background: rgba(0,255,65,0.06);
+    box-shadow: 0 0 15px rgba(0,255,65,0.15);
+}
+.upload-dropzone i { font-size: 1.8rem; display: block; margin-bottom: 8px; animation: pulse 2s infinite; }
+.upload-dropzone span { font-size: 0.75rem; letter-spacing: 1px; opacity: 0.8; }
+#upload-filename {
+    margin-top: 8px; font-size: 0.7rem; color: #fff; letter-spacing: 1px; word-break: break-all;
+}
+
+.upload-caption-field { margin-top: 16px; }
+
+#upload-submit {
+    width: 100%; margin-top: 20px; padding: 12px;
+    background: rgba(0,255,65,0.08); border: 1px solid var(--neon);
+    color: var(--neon); font-family: var(--font-main); font-weight: bold;
+    letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem;
+    cursor: pointer; border-radius: 3px; transition: 0.2s; position: relative; z-index: 1;
+}
+#upload-submit:hover { background: var(--neon); color: #000; box-shadow: 0 0 25px var(--neon); }
+#upload-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#upload-status {
+    margin-top: 14px; font-size: 0.75rem; letter-spacing: 1px;
+    text-align: center; min-height: 18px; position: relative; z-index: 1;
+}
+#upload-status.error { color: var(--glitch-red); text-shadow: 0 0 8px var(--glitch-red); }
+#upload-status.success { color: var(--neon); text-shadow: 0 0 8px var(--neon); }
+#upload-status.loading { color: var(--glitch-blue); text-shadow: 0 0 8px var(--glitch-blue); }
+
+/* Progress bar holografik */
+#upload-progress-wrap {
+    width: 100%; height: 4px; background: rgba(255,255,255,0.08);
+    border-radius: 2px; margin-top: 10px; overflow: hidden; display: none; position: relative; z-index: 1;
+}
+#upload-progress-bar {
+    height: 100%; width: 0%; background: var(--neon);
+    box-shadow: 0 0 10px var(--neon); transition: width 0.3s ease;
+}
+
+@media (max-width: 480px) {
+    .upload-panel { padding: 22px 16px; }
+    #hologram-upload-btn { padding: 8px 16px; font-size: 0.75rem; }
+}
+
     </style>
 </head>
 <body>
@@ -368,8 +562,50 @@
         <div id="gallery" class="slide">
             <div class="slide-hud">Latency Jaringan : <span class="lat-val">--</span>ms | DATABASE-SYNCED</div>
             <h2>GALERI KEGIATAN</h2>
+            <div class="gallery-toolbar">
+                <button id="hologram-upload-btn" onclick="UploadSystem.open()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> UPLOAD FOTO
+                </button>
+            </div>
             <div class="gallery-grid" id="gallery-container"></div>
         </div>
+
+        <!-- UPLOAD MODAL -->
+        <div id="upload-modal">
+            <div class="upload-panel">
+                <button id="upload-close" onclick="UploadSystem.close()">✕</button>
+                <h3><i class="fa-solid fa-satellite-dish"></i> UPLINK FOTO</h3>
+                <span class="upload-sub">// AKSES TERBATAS — HANYA PENGGUNA TERVERIFIKASI</span>
+
+                <div class="upload-field">
+                    <label for="upload-password">Kode Akses</label>
+                    <input type="password" id="upload-password" placeholder="••••••••" autocomplete="off">
+                </div>
+
+                <div class="upload-field">
+                    <label>File Foto</label>
+                    <div class="upload-dropzone" id="upload-dropzone" onclick="document.getElementById('upload-file').click()">
+                        <i class="fa-solid fa-image"></i>
+                        <span>Tap / Seret Foto ke Sini</span>
+                        <div id="upload-filename"></div>
+                    </div>
+                    <input type="file" id="upload-file" accept="image/*" style="display:none">
+                </div>
+
+                <div class="upload-field upload-caption-field">
+                    <label for="upload-caption">Caption Foto</label>
+                    <input type="text" id="upload-caption" placeholder="Contoh: Praktik Digital Marketing Kelas XI" maxlength="80">
+                </div>
+
+                <button id="upload-submit" onclick="UploadSystem.submit()">
+                    <i class="fa-solid fa-bolt"></i> KIRIM KE SERVER
+                </button>
+
+                <div id="upload-progress-wrap"><div id="upload-progress-bar"></div></div>
+                <div id="upload-status"></div>
+            </div>
+        </div>
+
 
         <footer>
 <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 15px;">
@@ -782,6 +1018,16 @@
 
                     if (data.status === "ok") {
                         DATABASE_FOTO = data.photos;
+
+                        // Gabungkan dengan cache lokal browser (foto yang baru diupload, sebelum sinkron Drive selesai)
+                        const localCache = (typeof UploadSystem !== 'undefined') ? UploadSystem.getLocalCache() : [];
+                        if (localCache.length > 0) {
+                            const existingFiles = new Set(DATABASE_FOTO.map(p => p.file));
+                            localCache.forEach(item => {
+                                if (!existingFiles.has(item.file)) DATABASE_FOTO.unshift(item);
+                            });
+                        }
+
                         this.renderGallery(DATABASE_FOTO);
 
                         // Update HUD galeri
@@ -1224,7 +1470,202 @@
     }
         }); // akhir DOMContentLoaded utama
 
-        // ── GALLERY LIGHTBOX VIEWER ──
+        // ── UPLOAD SYSTEM (Opsi C — Upload dengan Password ke Apps Script/Drive) ──
+        const UploadSystem = {
+            // ⚠️ GANTI password ini sesuai keinginanmu
+            ACCESS_CODE: "smks2026",
+
+            selectedFile: null,
+
+            init() {
+                const dz = document.getElementById('upload-dropzone');
+                const fileInput = document.getElementById('upload-file');
+
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files && e.target.files[0]) this.setFile(e.target.files[0]);
+                });
+
+                // Drag & drop
+                ['dragover', 'dragenter'].forEach(evt => {
+                    dz.addEventListener(evt, (e) => {
+                        e.preventDefault();
+                        dz.classList.add('dragover');
+                    });
+                });
+                ['dragleave', 'dragend', 'drop'].forEach(evt => {
+                    dz.addEventListener(evt, (e) => {
+                        e.preventDefault();
+                        dz.classList.remove('dragover');
+                    });
+                });
+                dz.addEventListener('drop', (e) => {
+                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                        this.setFile(e.dataTransfer.files[0]);
+                    }
+                });
+
+                // Tutup modal kalau klik area gelap
+                document.getElementById('upload-modal').addEventListener('click', (e) => {
+                    if (e.target.id === 'upload-modal') this.close();
+                });
+            },
+
+            setFile(file) {
+                if (!file.type.startsWith('image/')) {
+                    this.setStatus('⚠ HANYA FILE GAMBAR DIPERBOLEHKAN', 'error');
+                    return;
+                }
+                if (file.size > 8 * 1024 * 1024) { // 8MB limit
+                    this.setStatus('⚠ UKURAN FILE MAKSIMAL 8MB', 'error');
+                    return;
+                }
+                this.selectedFile = file;
+                document.getElementById('upload-filename').innerText = `📎 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+                this.setStatus('', '');
+            },
+
+            open() {
+                if (typeof AudioFX !== 'undefined') AudioFX.click();
+                document.getElementById('upload-modal').classList.add('open');
+                document.body.style.overflow = 'hidden';
+            },
+
+            close() {
+                document.getElementById('upload-modal').classList.remove('open');
+                document.body.style.overflow = '';
+            },
+
+            setStatus(msg, type) {
+                const el = document.getElementById('upload-status');
+                el.innerText = msg;
+                el.className = type || '';
+            },
+
+            setProgress(pct) {
+                const wrap = document.getElementById('upload-progress-wrap');
+                const bar  = document.getElementById('upload-progress-bar');
+                if (pct === null) { wrap.style.display = 'none'; bar.style.width = '0%'; return; }
+                wrap.style.display = 'block';
+                bar.style.width = pct + '%';
+            },
+
+            // Cache lokal browser untuk foto hasil upload (mode interlinked / lagu & warna disimpan terpisah via localStorage)
+            saveToLocalCache(item) {
+                try {
+                    const cache = JSON.parse(localStorage.getItem('nufa_gallery_cache') || '[]');
+                    cache.unshift(item); // foto terbaru tampil di atas
+                    localStorage.setItem('nufa_gallery_cache', JSON.stringify(cache));
+                } catch (e) {
+                    console.log('Gagal simpan cache lokal:', e);
+                }
+            },
+
+            getLocalCache() {
+                try {
+                    return JSON.parse(localStorage.getItem('nufa_gallery_cache') || '[]');
+                } catch (e) {
+                    return [];
+                }
+            },
+
+            fileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload  = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            },
+
+            async submit() {
+                const pass    = document.getElementById('upload-password').value.trim();
+                const caption = document.getElementById('upload-caption').value.trim() || 'Tanpa Caption';
+                const btn     = document.getElementById('upload-submit');
+
+                if (typeof AudioFX !== 'undefined') AudioFX.click();
+
+                if (!pass) {
+                    this.setStatus('⚠ MASUKKAN KODE AKSES TERLEBIH DAHULU', 'error');
+                    return;
+                }
+                if (pass !== this.ACCESS_CODE) {
+                    this.setStatus('✕ KODE AKSES SALAH — UPLOAD DITOLAK', 'error');
+                    document.getElementById('upload-password').value = '';
+                    return;
+                }
+                if (!this.selectedFile) {
+                    this.setStatus('⚠ PILIH FILE FOTO TERLEBIH DAHULU', 'error');
+                    return;
+                }
+                if (!GALLERY_API_URL || GALLERY_API_URL.includes('PASTE_')) {
+                    this.setStatus('⚠ GALLERY_API_URL BELUM DIKONFIGURASI', 'error');
+                    return;
+                }
+
+                btn.disabled = true;
+                this.setStatus('📡 MENGUNGGAH KE SERVER...', 'loading');
+                this.setProgress(15);
+
+                try {
+                    const base64 = await this.fileToBase64(this.selectedFile);
+                    this.setProgress(45);
+
+                    const payload = {
+                        action: 'upload',
+                        password: pass,
+                        filename: this.selectedFile.name,
+                        mimeType: this.selectedFile.type,
+                        caption: caption,
+                        data: base64
+                    };
+
+                    this.setProgress(70);
+
+                    const res = await fetch(GALLERY_API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // hindari preflight CORS di Apps Script
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await res.json();
+                    this.setProgress(100);
+
+                    if (result.status === 'ok') {
+                        this.setStatus('✓ UPLOAD BERHASIL — SINKRONISASI GALERI...', 'success');
+
+                        // Simpan ke cache lokal browser supaya langsung tampil walau belum sinkron Drive
+                        if (result.file) {
+                            this.saveToLocalCache({ file: result.file, caption: caption });
+                        }
+
+                        setTimeout(() => {
+                            this.resetForm();
+                            this.close();
+                            System.fetchGallery(); // refresh galeri dari Drive
+                        }, 1200);
+                    } else {
+                        throw new Error(result.message || 'Server menolak permintaan');
+                    }
+                } catch (err) {
+                    this.setStatus('✕ GAGAL: ' + err.message, 'error');
+                } finally {
+                    btn.disabled = false;
+                    setTimeout(() => this.setProgress(null), 1500);
+                }
+            },
+
+            resetForm() {
+                document.getElementById('upload-password').value = '';
+                document.getElementById('upload-caption').value = '';
+                document.getElementById('upload-file').value = '';
+                document.getElementById('upload-filename').innerText = '';
+                this.selectedFile = null;
+                this.setStatus('', '');
+            }
+        };
+        document.addEventListener('DOMContentLoaded', () => UploadSystem.init());
+
+
         const GalleryViewer = {
             index: 0,
             lb: null, img: null, cap: null, ctr: null,
