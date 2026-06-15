@@ -1032,7 +1032,10 @@
 
                         // Update HUD galeri
                         const hud = document.querySelector('#gallery .slide-hud');
-                        if (hud) hud.innerHTML = `Latency Jaringan : <span class="lat-val">--</span>ms | ${DATABASE_FOTO.length} FOTO LOADED`;
+                        const latVal = document.querySelector('#gallery .lat-val');
+                        if (hud && latVal) {
+                            const currentLat = latVal.innerText;
+                            hud.innerHTML = 'Latency Jaringan : <span class="lat-val">${currentLat}</span> ms | ${DATABASE_FOTO.length} PICTURE LOADED';
                     } else {
                         throw new Error(data.message || "Unknown error");
                     }
