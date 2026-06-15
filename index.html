@@ -575,7 +575,7 @@
             <div class="upload-panel">
                 <button id="upload-close" onclick="UploadSystem.close()">✕</button>
                 <h3><i class="fa-solid fa-satellite-dish"></i> UPLINK FOTO</h3>
-                <span class="upload-sub">// AKSES TERBATAS — HANYA PENGGUNA TERVERIFIKASI</span>
+                <span class="upload-sub">⚠️ Masukan kode enkripsi untuk mengirimkan foto ke server</span>
 
                 <div class="upload-field">
                     <label for="upload-password">Kode Akses</label>
@@ -594,7 +594,7 @@
 
                 <div class="upload-field upload-caption-field">
                     <label for="upload-caption">Caption Foto</label>
-                    <input type="text" id="upload-caption" placeholder="Contoh: Praktik Digital Marketing Kelas XI" maxlength="80">
+                    <input type="text" id="upload-caption" placeholder="Masukan deskripsi caption" maxlength="80">
                 </div>
 
                 <button id="upload-submit" onclick="UploadSystem.submit()">
@@ -650,7 +650,7 @@
         //  Cara dapat URL: Apps Script → Deploy → Manage Deployments
         //  Salin "Web app URL" dan paste di bawah ini
         // ============================================================
-        const GALLERY_API_URL = "https://script.google.com/macros/s/AKfycbxK41oLnX3ryZS5VAyVwn0ZRTGaC7kqZo2ZaNWc9KY2Krz88MwDTGRPDuNpTrjGkLG0Sg/exec";
+        const GALLERY_API_URL = "https://script.google.com/macros/s/AKfycbxhUnEyDtnYCEUsJWwpoSq5n6rx8Fo95YMaRyex1zYTM1k9iiByK9D_deJ9ybE-7V3XqQ/exec";
 
         // Database foto kosong — akan diisi otomatis dari Drive
         let DATABASE_FOTO = [];
@@ -658,7 +658,7 @@
         const DATABASE_CONTENT = {
             home: `
                 <h2>PROFIL SEKOLAH</h2>
-                <p>Selamat datang di Sistem Informasi Digital <strong> Bisnis Daring dan Pemasaran (BDP)</strong>. Website ini didedikasikan sebagai media dokumentasi, informasi, dan portofolio digital siswa-siswi <strong>SMK Nurul Falah</strong>.</p>
+                <p>Selamat datang di Sistem Informasi Digital <strong>SMK NURUL FALAH</strong>. Website ini didedikasikan sebagai media dokumentasi, informasi, dan portofolio digital siswa-siswi <strong>SMK Nurul Falah</strong>.</p>
                 <br>
                 <p>SMK Nurul Falah berlokasi di <strong>Desa Gedung Wani Timur, Kecamatan Margatiga, Kabupaten Lampung Timur</strong>. Di bawah naungan Yayasan Pendidikan Islam Nurul Falah, berkomitmen mencetak generasi muda yang kompeten,terampil dan bertanggung jawab serta memiliki akhlak mulia sesuai nilai pancasila.</p>
                 <div class="marquee-container">
