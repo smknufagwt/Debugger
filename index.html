@@ -1028,14 +1028,15 @@
                             });
                         }
 
-                        this.renderGallery(DATABASE_FOTO);
+                                                this.renderGallery(DATABASE_FOTO);
 
                         // Update HUD galeri
                         const hud = document.querySelector('#gallery .slide-hud');
                         const latVal = document.querySelector('#gallery .lat-val');
                         if (hud && latVal) {
                             const currentLat = latVal.innerText;
-                            hud.innerHTML = 'Latency Jaringan : <span class="lat-val">${currentLat}</span> ms | ${DATABASE_FOTO.length} PICTURE LOADED';
+                            hud.innerHTML = `Latency Jaringan : <span class="lat-val">${currentLat}</span> ms | ${DATABASE_FOTO.length} PICTURE LOADED`;
+                        }
                     } else {
                         throw new Error(data.message || "Unknown error");
                     }
@@ -1046,6 +1047,9 @@
                             <span style="color:#666;font-size:0.7rem;margin-top:8px;display:block;">${err.message}</span>
                             <button onclick="System.fetchGallery()" style="margin-top:16px;padding:8px 20px;border:1px solid #ff003c;background:transparent;color:#ff003c;font-family:var(--font-main);cursor:pointer;letter-spacing:1px;">↺ COBA LAGI</button>
                         </div>`;
+                }
+            }, // Batas akhir fetchGallery
+
                 }
             },
 
