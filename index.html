@@ -567,6 +567,20 @@
     #hologram-upload-btn { padding: 8px 16px; font-size: 0.75rem; }
 }
 
+.chat-msg {
+    border-left: 2px solid var(--neon-dim);
+    padding-left: 8px;
+    margin-bottom: 4px;
+}
+.chat-msg .chat-ip {
+    color: var(--glitch-blue);
+    font-size: 0.68rem;
+    opacity: 0.75;
+    display: block;
+    margin-bottom: 2px; /* memberi sedikit jarak dengan teks chat */
+}
+
+
     </style>
 </head>
 <body>
@@ -1917,10 +1931,16 @@
             },
 
             _time(ts) {
-                if (!ts) return '';
-                const d = new Date(ts);
-                return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            },
+    if (!ts) return '';
+    const d = new Date(ts);
+    return d.toLocaleDateString('id-ID', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }) + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+},
+
 
             toggle() {
                 this.isOpen = !this.isOpen;
