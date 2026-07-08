@@ -94,7 +94,7 @@
             top: 0; left: 0; width: 100%; height: 100%; 
             z-index: -2; opacity: 0.85; pointer-events: none;
         }
-        .scanlines { display: none; } 
+     
 
         .glitch-wrapper { position: relative; display: inline-block; }
         .glitch {
@@ -2344,7 +2344,13 @@ window.addEventListener('load', async () => {
                             if (this.seenIds.has(id)) return;
                             this.seenIds.add(id);
                             if (m.ts && m.ts < this.initTime) return; // pesan lama saat load awal
-                            if (m.uid ? m.uid === this.presenceId : m.ip === this.myIp) return; // jangan notif pesan sendiri
+                            // Blokir notif jika pesan milik sendiri:
+                            // cek uid (presenceId tab ini) ATAU ip yang sama,
+                            // ATAU timestamp sangat dekat dengan waktu kirim terakhir (toleransi 2 detik)
+                            const isMine = (m.uid && m.uid === this.presenceId)
+                                || (!m.uid && m.ip === this._maskIp(this.myIp))
+                                || (this._justSentTs && m.ts && Math.abs(m.ts - this._justSentTs) < 2000);
+                            if (isMine) return;
                             this.notify(m);
                         });
 
@@ -2550,33 +2556,37 @@ listEl.innerHTML = ids.map(key => {
             async notify(m) {
                 if (!this.notifEnabled) return;
 
-                // Lapis 1: Toast in-app — jalan di semua device
+                // Lapis 1: Toast in-app — tampil di tab mana pun yang menerima pesan
                 this._showToast(m);
 
-                // Lapis 2: Vibrasi HP
-                if (navigator.vibrate) { try { navigator.vibrate([180, 80, 180]); } catch (e) {} }
+                // Lapis 2 & 3 hanya aktif jika tab ini TIDAK sedang aktif (dokumen tidak fokus)
+                // Ini mencegah notif & getar mengganggu pengguna yang sedang aktif di tab chat
+                if (document.visibilityState !== 'visible') {
+                    // Lapis 2: Vibrasi HP — hanya saat tab di background
+                    if (navigator.vibrate) { try { navigator.vibrate([180, 80, 180]); } catch (e) {} }
 
-                // Lapis 3: Pulse tombol chat
+                    // Lapis 3: OS Notification via Service Worker (bekerja di Android)
+                    if (Notification.permission === 'granted' && 'serviceWorker' in navigator) {
+                        try {
+                            const reg = await navigator.serviceWorker.ready;
+                            reg.showNotification('💬 ' + this._maskIp(m.ip || 'Anonim') + ' • Global Chat SMK Nufa', {
+                                body: WordFilter.clean(m.text),
+                                tag: 'nufa-global-chat',
+                                renotify: true,
+                                icon: '/appcover.jpg',
+                                badge: '/notif.png',
+                                vibrate: [200, 100, 200],
+                            });
+                        } catch (e) { console.warn('Gagal kirim OS notification:', e); }
+                    }
+                }
+
+                // Lapis 4: Pulse tombol chat — tetap jalan walau tab aktif (visual saja, tidak mengganggu)
                 const chatBtn = document.getElementById('chat-btn');
                 if (chatBtn) {
                     chatBtn.classList.remove('pulse-alert');
                     void chatBtn.offsetWidth;
                     chatBtn.classList.add('pulse-alert');
-                }
-
-                // Lapis 4: OS Notification via Service Worker (bekerja di Android)
-                if (Notification.permission === 'granted' && 'serviceWorker' in navigator) {
-                    try {
-                        const reg = await navigator.serviceWorker.ready;
-                        reg.showNotification('💬 ' + this._maskIp(m.ip || 'Anonim') + ' • Global Chat SMK Nufa', {
-                            body: WordFilter.clean(m.text),
-                            tag: 'nufa-global-chat',
-                            renotify: true,
-                            icon: '/appcover.jpg',
-                            badge: '/notif.png',
-                            vibrate: [200, 100, 200],
-                        });
-                    } catch (e) { console.warn('Gagal kirim OS notification:', e); }
                 }
             },
 
@@ -2696,6 +2706,8 @@ listEl.innerHTML = ids.map(key => {
                     text,
                     ts: now
                 };
+                // Tandai tab ini baru saja kirim, agar listener tidak trigger notif untuk pesan sendiri
+                this._justSentTs = now;
 
                 if (this.db) {
                     try {
